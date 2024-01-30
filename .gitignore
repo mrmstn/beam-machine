@@ -1,0 +1,4 @@
+/openssl-*/
+/otp_*/
+/sysroot/
+*.tar.gz
