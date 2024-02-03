@@ -1,0 +1,29 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main  # or any branch you want to trigger the workflow
+
+env:
+  OPENSSL_VERSION: 3.2.1
+  OTP_VERSION: 26.2.1
+
+jobs:
+  build-and-package:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Run build.sh script
+      run: ./build.sh
+
+    - name: Run package.sh script
+      run: ./package.sh
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: otp
+        path: otp_*.tar.gz
