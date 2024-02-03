@@ -27,3 +27,24 @@ jobs:
       with:
         name: otp
         path: otp_*.tar.gz
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.OTP_VERSION }}-${{ env.OPENSSL_VERSION }}
+        release_name: Release ${{ env.OTP_VERSION }} (SSL ${{ env.OPENSSL_VERSION }})
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./otp_*.tar.gz
+        asset_name: otp_${{ env.OTP_VERSION }}_ssl_${{ env.OPENSSL_VERSION }}.tar.gz
+        asset_content_type: application/gzip
